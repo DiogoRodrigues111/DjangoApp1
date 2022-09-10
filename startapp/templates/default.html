@@ -5,11 +5,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>HELLO PYTHON</h1>
-
-	{% for i in value %}
-		{{i}}
-		<label></label>
-	{% endfor %}
+	<form action="" method="post">
+		{% csrf_token %}
+        {{form}}
+		<input name="submit" type="submit" value="Submit" required/>
+	</form>
 </body>
 </html>
