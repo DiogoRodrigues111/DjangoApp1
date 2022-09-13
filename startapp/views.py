@@ -1,5 +1,4 @@
 from genericpath import exists
-from msilib.schema import Directory
 from os import mkdir
 from django.http import HttpRequest
 from django.shortcuts import render
@@ -19,8 +18,9 @@ def index(request: HttpRequest):
 
     if request.method == 'POST':
         form = UploadFileClass(request.POST, request.FILES)
-        if form.is_valid:
-            FileImporterSystem.register_file("media/" + request.FILES['file'])
+        if form.is_valid():
+            for itname in request.FILES:
+                FileImporterSystem.register_file("media/" + itname.name, request.FILES)
             print ('Upload complete with success')
     else:
         form = UploadFileClass()

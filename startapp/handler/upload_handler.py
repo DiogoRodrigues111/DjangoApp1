@@ -1,7 +1,7 @@
 
 from genericpath import exists
-from io import FileIO
-from xmlrpc.client import Boolean
+from os import mkdir
+from django.http import HttpRequest
 
 
 class FileImporterSystem:
@@ -10,7 +10,7 @@ class FileImporterSystem:
             pass
         return True
 
-    def register_file(_name):
-        with open (_name, 'w+') as dst:
-            if check_media_folder('media/'):
-                dst.write(_name)
+    def register_file(__path, __r: HttpRequest):
+        with open (__path, 'wb+') as dst:
+            for it in __r.FILES:
+                dst.write(it['file'])
