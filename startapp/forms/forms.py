@@ -5,4 +5,4 @@ from django.forms import CharField, FileField, forms
 
 class UploadFileClass(forms.Form):
     #title = CharField(max_length=50) #html
-    file = FileField(required=False)
+    file = forms.FileField(required=False)

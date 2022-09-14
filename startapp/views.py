@@ -1,9 +1,13 @@
 from genericpath import exists
-from os import mkdir
+from os import mkdir, listdir
+from urllib import response
+from urllib.request import url2pathname
 from django.http import HttpRequest
 from django.shortcuts import render
 from .handler.upload_handler import FileImporterSystem
 from .forms.forms import UploadFileClass
+from django.core.files.storage import FileSystemStorage
+from io import FileIO
 
 
 def index(request: HttpRequest):
@@ -13,20 +17,20 @@ def index(request: HttpRequest):
     Returns:
         render: Django library
     """
+
     if not exists("media/"):
         mkdir("media/")
 
-    if request.method == 'POST':
-        form = UploadFileClass(request.POST, request.FILES)
-        if form.is_valid():
-            for itname in request.FILES:
-                FileImporterSystem.register_file("media/" + itname.name, request.FILES)
-            print ('Upload complete with success')
-    else:
-        form = UploadFileClass()
-        print ('Form returns new instance or not valid.')
+    files = listdir("media/")
 
-    return render(request, 'default.html', {'form':form})
+    for foreach in files:
+        print (f"Files Found: {foreach}")
+        
+        media_static = {
+            'media_source':url2pathname(foreach)
+        }
+
+    return render(request, 'default.html', media_static)
 
 
 def upload(request: HttpRequest):
@@ -40,4 +44,16 @@ def upload(request: HttpRequest):
         render: Django library
     """
 
-    return render(request, "upload.html")#{'form':form}
+    if request.method == 'POST':
+        form = UploadFileClass(request.POST, request.FILES)
+        file_upload = request.FILES['file']
+        fs = FileSystemStorage()
+        file_name = fs.save(file_upload.name, file_upload)
+        fs.url(file_name) # test without this
+        if form.is_valid():
+            print ('Upload complete with success')
+    else:
+        form = UploadFileClass()
+        print ('Form returns new instance or not valid.')
+
+    return render(request, 'upload.html', {'form':form})

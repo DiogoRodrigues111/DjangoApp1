@@ -2,13 +2,13 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Home Page</title>
 </head>
 <body>
-	<form action="" method="post">
-		{% csrf_token %}
-        {{form}}
-		<input name="submit" type="submit" value="Submit"/>
-	</form>
+	{% load static %}
+
+	<a href="{% load static %}media/{{media_source}}">
+		<img src="{% load static %}media/{{media_source}}" width="200" height="200"/>
+	</a>
 </body>
 </html>
