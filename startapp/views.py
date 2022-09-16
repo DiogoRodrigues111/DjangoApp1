@@ -1,14 +1,10 @@
 from genericpath import exists
 from os import mkdir, listdir
-from urllib import response
-from urllib.request import url2pathname
 from django.http import HttpRequest
 from django.shortcuts import render
-from .handler.upload_handler import FileImporterSystem
 from .forms.forms import UploadFileClass
 from django.core.files.storage import FileSystemStorage
-from io import FileIO
-
+from django.shortcuts import redirect
 
 def index(request: HttpRequest):
     """
@@ -21,13 +17,19 @@ def index(request: HttpRequest):
     if not exists("media/"):
         mkdir("media/")
 
-    files = listdir("media/")
-
-    for foreach in files:
-        print (f"Files Found: {foreach}")
+    for foreach in listdir("media/"):
+        print (f'Files Founds: {foreach}')
         
+        jpg = foreach.endswith('.jpg')
+        videos = foreach.endswith('.mp4')
+
+        sequence = 'media/'
+        _lst_itr = sequence.join(foreach)
+
         media_static = {
-            'media_source':url2pathname(foreach)
+            'jpg':jpg,
+            'videos':videos,
+            'listdir':_lst_itr
         }
 
     return render(request, 'default.html', media_static)
@@ -52,6 +54,7 @@ def upload(request: HttpRequest):
         fs.url(file_name) # test without this
         if form.is_valid():
             print ('Upload complete with success')
+            return redirect('/')
     else:
         form = UploadFileClass()
         print ('Form returns new instance or not valid.')
