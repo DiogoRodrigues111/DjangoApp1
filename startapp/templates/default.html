@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta content="text/html;X-Content-Type-Options: nosniff" http-equiv="Content-Type" />
+    <meta content="text/html;X-Content-Type-Options: nosniff" http-equiv="Content-Type"/>
 
-	<title>Home Page</title>
-	<link rel="stylesheet" type="text/css" href="css/site.css" />
+    <title>Home Page</title>
+    <link rel="stylesheet" type="text/css" href="css/site.css"/>
 </head>
 <body>
-	{% load static %}
-	{% if listdir %}
-		{% for img in listdir %}
-		<a href="{{ listdir }}">
-			<img class="" src="{{ listdir }}" width="200" height="300"/>
-		</a>
-		{% endfor %}
-	{% endif %}
+    {% for img in g_base %}
+        <a href="media/{{ img }}">
+            <img class="" src="media/{{ img }}" width="200" height="300"/>
+        </a>
+    {% endfor %}
 </body>
 </html>
