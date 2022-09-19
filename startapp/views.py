@@ -21,13 +21,13 @@ def index(request: HttpRequest):
     g_base = listdir('media/')
     for base in g_base:
         print(f'Files Founds: {base}')
+
         base = path.basename(base).split()
         if g_base.count(base) > 1:
             g_base = base
 
     media_static = {
-        'base': base,
-        'g_base': g_base,
+        'g_base': g_base
     }
 
     return render(request, 'default.html', media_static)

@@ -12,4 +12,4 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.index),
     path('upload', views.upload),
-]
+] + static(settings.STATIC_CSS_URL, document_root=settings.STATIC_CSS_ROOT)

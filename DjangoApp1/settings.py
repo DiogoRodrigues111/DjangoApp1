@@ -22,6 +22,9 @@ MEDIA_URL = 'media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static') # static directory in the root directory
 STATIC_URL = 'static/'
 
+STATIC_CSS_ROOT = os.path.join(BASE_DIR, 'startapp/static/css')
+STATIC_CSS_URL = 'startapp/static/css/'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
