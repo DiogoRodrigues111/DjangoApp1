@@ -15,19 +15,29 @@ def index(request: HttpRequest):
         render: Django library
     """
 
+    global value_image
+    global value_video
+
     if not exists("media/"):
         mkdir("media/")
 
-    g_base = listdir('media/')
-    for base in g_base:
-        print(f'Files Founds: {base}')
+    # Images
+    images = listdir('media/')
+    for lst_image in images:
+        if lst_image.endswith('.jpg'):
+            value_image = path.basename(lst_image)
+            print(f'JPG IMAGES ONLY FOUND: {value_image}')
 
-        base = path.basename(base).split()
-        if g_base.count(base) > 1:
-            g_base = base
+    # Videos
+    videos = listdir('media/')
+    for lst_video in videos:
+        if lst_video.endswith('.mp4'):
+            value_video = path.basename(lst_video)
+            print(f'MP4 VIDEOS ONLY FOUND {value_video}')
 
     media_static = {
-        'g_base': g_base
+        'images': value_image,
+        'videos': value_video
     }
 
     return render(request, 'default.html', media_static)

@@ -1,7 +1,7 @@
 body {
-  background-color: yellow;
+  background-color: white;
 }
 
-.border_radius {
-    border-radius: 40px;
+.border-rounded {
+    border-radius: 15px;
 }

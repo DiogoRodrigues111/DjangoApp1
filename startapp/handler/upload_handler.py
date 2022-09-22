@@ -5,6 +5,4 @@ from django.http import HttpRequest
 
 
 class FileImporterSystem:
-
-    def register_file():
-        pass
+    pass
