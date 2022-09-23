@@ -1,0 +1,6 @@
+# This is an *** Example ***
+# Site Font: https://hub.docker.com/_/python/
+
+
+$ docker build -t my-python-app .
+$ docker run -it --rm --name my-running-app my-python-app

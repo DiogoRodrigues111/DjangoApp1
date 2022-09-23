@@ -22,19 +22,26 @@ def index(request: HttpRequest):
         mkdir("media/")
 
     # Images
+    # Get iterator of the media folder.
     images = listdir('media/')
     for lst_image in images:
         if lst_image.endswith('.jpg'):
+            # Lock only in JPG
+            # Record values of the variable for print in Context.
+            # And take something value of the 'List_Image'
             value_image = path.basename(lst_image)
-            print(f'JPG IMAGES ONLY FOUND: {value_image}')
 
     # Videos
+    # Get iterator of the media folder.
     videos = listdir('media/')
     for lst_video in videos:
         if lst_video.endswith('.mp4'):
+            # Lock only in MP4
+            # Record values of the variable for print in Context.
+            # And take something value of the 'list_video'
             value_video = path.basename(lst_video)
-            print(f'MP4 VIDEOS ONLY FOUND {value_video}')
 
+    # Context
     media_static = {
         'images': value_image,
         'videos': value_video
