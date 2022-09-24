@@ -29,7 +29,7 @@ def index(request: HttpRequest):
             # Lock only in JPG
             # Record values of the variable for print in Context.
             # And take something value of the 'List_Image'
-            value_image = path.basename(lst_image)
+            value_image = path.basename(lst_image) # Fix this.
 
     # Videos
     # Get iterator of the media folder.
@@ -39,7 +39,7 @@ def index(request: HttpRequest):
             # Lock only in MP4
             # Record values of the variable for print in Context.
             # And take something value of the 'list_video'
-            value_video = path.basename(lst_video)
+            value_video = path.basename(lst_video) # Fix this.
 
     # Context
     media_static = {
