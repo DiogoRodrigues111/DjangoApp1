@@ -5,6 +5,7 @@ from django.shortcuts import render
 from .forms.forms import UploadFileClass
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
+from databases.mongodb import user_db
 
 
 def index(request: HttpRequest):
@@ -12,7 +13,7 @@ def index(request: HttpRequest):
     Generating HTML Index page results.
 
     Returns:
-        render: Django library
+        rendering page
     """
 
     global value_image
@@ -21,15 +22,24 @@ def index(request: HttpRequest):
     if not exists("media/"):
         mkdir("media/")
 
+    # When entry in home page the MongoDB database, is create automatically.
+    mongodb_database_new = user_db.create_instance_new_database('mongo_UserDB')
+    if not mongodb_database_new:
+        print('Failed to creating new database on MongoDB.')
+    else:
+        print('MongoDB Database Created with successful, In Index Home Page.')
+
     # Images
     # Get iterator of the media folder.
     images = listdir('media/')
     for lst_image in images:
-        if lst_image.endswith('.jpg'):
-            # Lock only in JPG
+        filenames_ends = lst_image.endswith('.jpg')
+        if filenames_ends:
+            # Lock only in JPG.
             # Record values of the variable for print in Context.
-            # And take something value of the 'List_Image'
-            value_image = path.basename(lst_image) # Fix this.
+            # And take something value of the 'List_Image'.
+            value_image = path.basename(lst_image)
+            # Fix this, foreach wrong
 
     # Videos
     # Get iterator of the media folder.
@@ -39,7 +49,8 @@ def index(request: HttpRequest):
             # Lock only in MP4
             # Record values of the variable for print in Context.
             # And take something value of the 'list_video'
-            value_video = path.basename(lst_video) # Fix this.
+            value_video = path.basename(lst_video)
+            # Fix this, foreach wrong
 
     # Context
     media_static = {
@@ -58,7 +69,7 @@ def upload(request: HttpRequest):
         request (HttpRequest): Get File to upload system.
 
     Returns:
-        render: Django library
+        rendering page
     """
 
     if request.method == 'POST':
