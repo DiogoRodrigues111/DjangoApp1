@@ -16,7 +16,7 @@ def create_instance_new_database(name_db: str, conn_host='mongodb://127.0.0.1:27
     """
 
     client = pymongo.MongoClient(conn_host)
-
+    print('MongoDB: Database created with successful.')
     create_db = client[name_db if name_db in client.list_database_names() is not None else None]
     if create_db.list_collection_names():
         print(f'MongoDB Database Founds: {create_db.list_collection_names()}')
