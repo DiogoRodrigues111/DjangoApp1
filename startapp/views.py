@@ -5,7 +5,7 @@ from django.shortcuts import render
 from .forms.forms import UploadFileClass
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
-from databases.mongodb import user_db
+from .databases.mongodb import user_db
 
 
 def index(request: HttpRequest):
@@ -18,16 +18,13 @@ def index(request: HttpRequest):
 
     global value_image
     global value_video
+    global cxt_media
 
     if not exists("media/"):
         mkdir("media/")
 
-    # When entry in home page the MongoDB database, is create automatically.
-    mongodb_database_new = user_db.create_instance_new_database('mongo_UserDB')
-    if not mongodb_database_new:
-        print('Failed to creating new database on MongoDB.')
-    else:
-        print('MongoDB Database Created with successful, In Index Home Page.')
+    # When entry in home page the MongoDB database, is created automatically.
+    user_db.create_instance_new_database('mongo_UserDB')
 
     # Images
     # Get iterator of the media folder.
@@ -40,6 +37,9 @@ def index(request: HttpRequest):
             # And take something value of the 'List_Image'.
             value_image = path.basename(lst_image)
             # Fix this, foreach wrong
+            cxt_media = {
+                'images': value_image,
+            }
 
     # Videos
     # Get iterator of the media folder.
@@ -51,14 +51,11 @@ def index(request: HttpRequest):
             # And take something value of the 'list_video'
             value_video = path.basename(lst_video)
             # Fix this, foreach wrong
+            cxt_media = {
+                'videos': value_video,
+            }
 
-    # Context
-    media_static = {
-        'images': value_image,
-        'videos': value_video
-    }
-
-    return render(request, 'default.html', media_static)
+    return render(request, 'default.html', cxt_media)
 
 
 def upload(request: HttpRequest):

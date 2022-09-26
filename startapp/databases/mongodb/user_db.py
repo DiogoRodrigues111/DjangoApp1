@@ -1,7 +1,7 @@
 import pymongo
 
 
-def create_instance_new_database(name_db, conn_host='mongodb://127.0.0.1:27017/'):
+def create_instance_new_database(name_db: str, conn_host='mongodb://127.0.0.1:27017/'):
     """
     Create an new instance of the databases for MongoDB.
 
@@ -15,12 +15,8 @@ def create_instance_new_database(name_db, conn_host='mongodb://127.0.0.1:27017/'
             Default Host and Port of the MongoDB.
     """
 
-    chk_database = f'{name_db}'
-
     client = pymongo.MongoClient(conn_host)
-    create_db = client[name_db]
 
-    if chk_database in client.list_databases():
-        print(f'API: Database created with success with name {create_db}')
-        print(' ')
-        print(f'API: List of The databases founds: {client.list_databases()}')
+    create_db = client[name_db if name_db in client.list_database_names() is not None else None]
+    if create_db.list_collection_names():
+        print(f'MongoDB Database Founds: {create_db.list_collection_names()}')
