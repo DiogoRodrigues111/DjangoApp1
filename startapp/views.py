@@ -5,7 +5,12 @@ from django.shortcuts import render
 from .forms.forms import UploadFileClass
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
-from .databases.mongodb import user_db
+from .databases.mongodb import mongo_user_db
+from .databases.postgresql import pg_user_db
+
+# CONSTANT
+PG_CREATE_TABLE = \
+        'CREATE TABLE pgUserTab(id SERIAL PRIMARY KEY NOT NULL, name VARCHAR, email VARCHAR, password VARCHAR);'
 
 
 def index(request: HttpRequest):
@@ -23,8 +28,11 @@ def index(request: HttpRequest):
     if not exists("media/"):
         mkdir("media/")
 
-    # When entry in home page the MongoDB database, is created automatically.
-    user_db.create_instance_new_database('mongo_UserDB')
+    # When entry in home page the database, is created automatically.
+    # MongoDB
+    mongo_user_db.create_instance_new_database('mongo_UserDB')
+    # Postgres
+    pg_user_db.create_new_cmd_pg(PG_CREATE_TABLE)
 
     # Images
     # Get iterator of the media folder.
