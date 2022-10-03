@@ -12,4 +12,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.index),
     path('upload', views.upload),
+    path('update', views.update),
+    path('signin', views.signin),
+    path('login', views.login),
 ] + static(settings.STATIC_CSS_URL, document_root=settings.STATIC_CSS_ROOT)

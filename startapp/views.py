@@ -8,13 +8,16 @@ from django.shortcuts import redirect
 from .databases.mongodb import mongo_user_db
 from .databases.postgresql import pg_user_db
 
-# CONSTANT
+""" GLOBALS """
+
+# Video and Image, iterable with HTML.
+global g_video, g_image
+
+""" CONSTANT """
+
+# Create an table.
 PG_CREATE_TABLE = \
     'CREATE TABLE pgUserTab(id SERIAL PRIMARY KEY NOT NULL, name VARCHAR, email VARCHAR, password VARCHAR);'
-
-
-# GLOBALS
-global g_video, g_image
 
 
 def index(request: HttpRequest):
@@ -25,12 +28,14 @@ def index(request: HttpRequest):
         rendering page
     """
 
+    # Context Iterations.
     global g_video, g_image
 
     if not exists("media/"):
         mkdir("media/")
 
-    # When entry in home page the database, is created automatically.
+    """ When entry in home page the database, is created automatically. """
+
     # MongoDB
     mongo_user_db.create_instance_new_database('mongo_UserDB')
     # Postgres
@@ -42,9 +47,13 @@ def index(request: HttpRequest):
     # Make list of 'media/' folder for iterable with files.
     for lst in foreach_media_folder:
 
-        # Lock only in JPG.
-        # Record values of the variable for print in Context.
-        # And take something value of the 'List_Image'.
+        """
+        
+        Only locking in JPG and MP4.
+        Record values of the variable for print in Context.
+        And take something value of the 'lst' iterator.
+        
+        """
 
         # Take values of the paths iterating.
         base = path.basename(lst)
@@ -60,8 +69,12 @@ def index(request: HttpRequest):
             if base.endswith('.mp4'):
                 video_source = base.split()
                 g_video = base.format(*video_source).split()
+        else:
+            # Return then ...
+            g_image = base.split()
+            g_video = base.split()
 
-    # Context of the media.
+    # Page Context.
     context_for_media = {
         'images': g_image,
         'videos': g_video,
@@ -78,7 +91,7 @@ def upload(request: HttpRequest):
         request (HttpRequest): Get File to upload system.
 
     Returns:
-        rendering page
+        rendering page.
     """
 
     if request.method == 'POST':
@@ -99,3 +112,51 @@ def upload(request: HttpRequest):
         print('Form returns new instance or not valid.')
 
     return render(request, 'upload.html', {'form': form})
+
+
+def update(request: HttpRequest):
+    """
+
+    Generating HTML Update page results.
+
+    Args:
+        request: Results requests.
+
+    Returns:
+        rendering page.
+
+    """
+
+    return render(request, 'update.html')
+
+
+def signin(request: HttpRequest):
+    """
+
+    Generating HTML Update page results.
+
+    Args:
+        request: Results requests.
+
+    Returns:
+        rendering page.
+
+    """
+
+    return render(request, 'signin.html')
+
+
+def login(request: HttpRequest):
+    """
+
+    Generating HTML Update page results.
+
+    Args:
+        request: Results requests.
+
+    Returns:
+        rendering page.
+
+    """
+
+    return render(request, 'login.html')

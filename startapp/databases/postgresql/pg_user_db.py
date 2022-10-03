@@ -2,6 +2,69 @@ import psycopg2
 from psycopg2 import errors
 
 
+""" GLOBALS """
+
+""" Postgres constant variables. """
+# That variable is GET in the Forms, and not POST.
+global usr_name, usr_email, usr_password
+
+
+""" CONSTANTS """
+
+# Update table with password of the user.
+PG_UPDATE_WITH_PASSWORD = \
+    'UPDATE pgUserTab' \
+    F'SET name = {usr_name}, email = {usr_email}, password = {usr_password} WHERE email = {usr_email}'
+
+# Insert values to table.
+PG_INSERT_DATA_TO_TABLE = \
+    F'INSERT INTO pgUserTab(name, email, password) VALUES ({usr_name}, {usr_email}, {usr_password});'
+
+
+def insert_new_data_pg(name, email, password):
+    """ Insert into the table. """
+
+    # Pg SQL Iterations
+    global usr_name, usr_email, usr_password
+
+    # Set values the user to global variable.
+    usr_name = name
+    usr_email = email
+    usr_password = password
+
+    return PG_INSERT_DATA_TO_TABLE
+
+
+def update_new_table_pg(check_email, name, email, password):
+    """
+
+    Update Postgresql for new values table.
+
+    Note: It is HTML page that update
+        See: templates/update.html.
+
+    """
+
+    # Pg SQL Iterations
+    global usr_name, usr_email, usr_password
+
+    # TODO:
+    #   Get iteration with globals variables, before insert datas.
+    #   Find in Database name values,
+    #   Find and check if email is correspond with Database values inserts.
+    #   Check if password really exists for others datas inserted.
+
+    # if check_email is find in database
+    # ... update new values with global.
+
+    # Get new values of the globals variables.
+    name = usr_name
+    email = usr_email
+    password = usr_password
+
+    return PG_UPDATE_WITH_PASSWORD
+
+
 def create_new_cmd_pg(query):
     """
     Create Command-Line for query and commit sequence to Postgres.
