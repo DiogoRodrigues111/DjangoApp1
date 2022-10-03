@@ -10,7 +10,11 @@ from .databases.postgresql import pg_user_db
 
 # CONSTANT
 PG_CREATE_TABLE = \
-        'CREATE TABLE pgUserTab(id SERIAL PRIMARY KEY NOT NULL, name VARCHAR, email VARCHAR, password VARCHAR);'
+    'CREATE TABLE pgUserTab(id SERIAL PRIMARY KEY NOT NULL, name VARCHAR, email VARCHAR, password VARCHAR);'
+
+
+# GLOBALS
+global g_video, g_image
 
 
 def index(request: HttpRequest):
@@ -21,9 +25,7 @@ def index(request: HttpRequest):
         rendering page
     """
 
-    global value_image
-    global value_video
-    global cxt_media
+    global g_video, g_image
 
     if not exists("media/"):
         mkdir("media/")
@@ -34,36 +36,38 @@ def index(request: HttpRequest):
     # Postgres
     pg_user_db.create_new_cmd_pg(PG_CREATE_TABLE)
 
-    # Images
-    # Get iterator of the media folder.
-    images = listdir('media/')
-    for lst_image in images:
-        filenames_ends = lst_image.endswith('.jpg')
-        if filenames_ends:
-            # Lock only in JPG.
-            # Record values of the variable for print in Context.
-            # And take something value of the 'List_Image'.
-            value_image = path.basename(lst_image)
-            # Fix this, foreach wrong
-            cxt_media = {
-                'images': value_image,
-            }
+    # Take list of the files in media folder.
+    foreach_media_folder = listdir('media/')
 
-    # Videos
-    # Get iterator of the media folder.
-    videos = listdir('media/')
-    for lst_video in videos:
-        if lst_video.endswith('.mp4'):
-            # Lock only in MP4
-            # Record values of the variable for print in Context.
-            # And take something value of the 'list_video'
-            value_video = path.basename(lst_video)
-            # Fix this, foreach wrong
-            cxt_media = {
-                'videos': value_video,
-            }
+    # Make list of 'media/' folder for iterable with files.
+    for lst in foreach_media_folder:
 
-    return render(request, 'default.html', cxt_media)
+        # Lock only in JPG.
+        # Record values of the variable for print in Context.
+        # And take something value of the 'List_Image'.
+
+        # Take values of the paths iterating.
+        base = path.basename(lst)
+
+        # The base is always > than one.
+        if base.count(lst) > 0:
+            # Iterable with JPG files.
+            if base.endswith('.jpg'):
+                image_source = base.split()
+                g_image = base.format(*image_source).split()
+
+            # Iterable with MP4 files.
+            if base.endswith('.mp4'):
+                video_source = base.split()
+                g_video = base.format(*video_source).split()
+
+    # Context of the media.
+    context_for_media = {
+        'images': g_image,
+        'videos': g_video,
+    }
+
+    return render(request, 'default.html', context_for_media)
 
 
 def upload(request: HttpRequest):
