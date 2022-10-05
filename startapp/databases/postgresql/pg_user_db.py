@@ -1,4 +1,5 @@
 import psycopg2
+from django.shortcuts import redirect
 from psycopg2 import errors
 
 
@@ -14,7 +15,7 @@ global usr_name, usr_email, usr_password
 # Update table with password of the user.
 PG_UPDATE_WITH_PASSWORD = \
     'UPDATE pgUserTab' \
-    F'SET name = {usr_name}, email = {usr_email}, password = {usr_password} WHERE email = {usr_email}'
+    F'SET name = {usr_name}, password = {usr_password} WHERE email = {usr_email};'
 
 # Insert values to table.
 PG_INSERT_DATA_TO_TABLE = \
@@ -35,13 +36,20 @@ def insert_new_data_pg(name, email, password):
     return PG_INSERT_DATA_TO_TABLE
 
 
-def update_new_table_pg(check_email, name, email, password):
+def update_new_table_pg(name, password):
     """
 
     Update Postgresql for new values table.
 
     Note: It is HTML page that update
         See: templates/update.html.
+
+    Args:
+        name:
+            This is really go changed.
+
+        password:
+            This is really go changed.
 
     """
 
@@ -56,11 +64,23 @@ def update_new_table_pg(check_email, name, email, password):
 
     # if check_email is find in database
     # ... update new values with global.
+    if usr_email:
 
-    # Get new values of the globals variables.
-    name = usr_name
-    email = usr_email
-    password = usr_password
+        # Get new values of the globals variables.
+
+        name = usr_name
+        password = usr_password
+
+        redirect('/')
+
+    else:
+        # Failed to access user email on database.
+        redirect('/update')
+
+        # Debug.
+        print('CHECK_EMAIL is not equal to Email registered in Database.')
+        # Launching an Exception RuntimeError.
+        raise RuntimeError('CHECK_EMAIL is not equal to Email registered in Database.')
 
     return PG_UPDATE_WITH_PASSWORD
 
