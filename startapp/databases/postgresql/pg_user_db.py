@@ -12,14 +12,12 @@ global usr_name, usr_email, usr_password
 
 """ CONSTANTS """
 
-# Update table with password of the user.
-PG_UPDATE_WITH_PASSWORD = \
-    'UPDATE pgUserTab' \
-    F'SET name = {usr_name}, password = {usr_password} WHERE email = {usr_email};'
 
-# Insert values to table.
-PG_INSERT_DATA_TO_TABLE = \
-    F'INSERT INTO pgUserTab(name, email, password) VALUES ({usr_name}, {usr_email}, {usr_password});'
+class PgVariables:
+    """ Get and Set, properties """
+
+    PG_INSERT_DATA_TO_TABLE: str
+    PG_UPDATE_WITH_PASSWORD: str
 
 
 def insert_new_data_pg(name, email, password):
@@ -33,7 +31,11 @@ def insert_new_data_pg(name, email, password):
     usr_email = email
     usr_password = password
 
-    return PG_INSERT_DATA_TO_TABLE
+    # Insert values to table.
+    PgVariables.PG_INSERT_DATA_TO_TABLE = \
+        F'INSERT INTO pgUserTab(name, email, password) VALUES ({usr_name}, {usr_email}, {usr_password});'
+
+    return PgVariables.PG_INSERT_DATA_TO_TABLE
 
 
 def update_new_table_pg(name, password):
@@ -62,14 +64,17 @@ def update_new_table_pg(name, password):
     #   Find and check if email is correspond with Database values inserts.
     #   Check if password really exists for others datas inserted.
 
-    # if check_email is find in database
-    # ... update new values with global.
-    if usr_email:
+    # Update table with password of the user.
+    PgVariables.PG_UPDATE_WITH_PASSWORD = \
+        F'UPDATE pgUserTab SET name = {name}, password = {password} WHERE email = {usr_email};'
+
+    if PgVariables.PG_UPDATE_WITH_PASSWORD:
 
         # Get new values of the globals variables.
+        # This is Get properties
 
-        name = usr_name
-        password = usr_password
+        usr_name = name
+        usr_password = password
 
         redirect('/')
 
@@ -82,7 +87,29 @@ def update_new_table_pg(name, password):
         # Launching an Exception RuntimeError.
         raise RuntimeError('CHECK_EMAIL is not equal to Email registered in Database.')
 
-    return PG_UPDATE_WITH_PASSWORD
+    return PgVariables.PG_UPDATE_WITH_PASSWORD
+
+
+def pg_delete_columns(email):
+    """
+    Delete datas on Databases.
+
+    Args:
+        email:
+            That routine take values of the email, and then delete if possible.
+
+    """
+
+    """ That operation not can be reversible. """
+
+    global usr_name, usr_email, usr_password
+
+    if email is usr_email:
+        usr_name = ''
+        usr_email = ''
+        usr_password = ''
+    else:
+        raise RuntimeError('Not can be DELETE values on Database. Something Wrong occur.')
 
 
 def create_new_cmd_pg(query):
