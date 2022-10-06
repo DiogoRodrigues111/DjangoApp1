@@ -15,4 +15,5 @@ urlpatterns = [
     path('update', views.update),
     path('signin', views.signin),
     path('login', views.login),
+    path('delete', views.delete)
 ] + static(settings.STATIC_CSS_URL, document_root=settings.STATIC_CSS_ROOT)

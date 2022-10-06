@@ -5,6 +5,10 @@
     <title>Update Page</title>
 </head>
 <body>
-
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ update_data }}
+        <input type="submit" value="Update"/>
+    </form>
 </body>
 </html>

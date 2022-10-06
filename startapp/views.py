@@ -2,7 +2,7 @@ from genericpath import exists
 from os import mkdir, listdir, path
 from django.http import HttpRequest
 from django.shortcuts import render
-from .forms.forms import UploadFileClass
+from .forms.forms import UploadFileClass, PgSignInRegister, PgUpdate, PgDelete
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
 from .databases.mongodb import mongo_user_db
@@ -12,10 +12,11 @@ from .databases.postgresql import pg_user_db
 
 # Video and Image, iterable with HTML.
 global g_video, g_image
+global register, delete_user, update_user
 
 """ CONSTANT """
 
-# Create an table.
+# Create a table.
 PG_CREATE_TABLE = \
     'CREATE TABLE pgUserTab(id SERIAL PRIMARY KEY NOT NULL, name VARCHAR, email VARCHAR, password VARCHAR);'
 
@@ -120,14 +121,36 @@ def update(request: HttpRequest):
     Generating HTML Update page results.
 
     Args:
-        request: Results requests.
+        request: Results requests
 
     Returns:
         rendering page.
 
     """
 
-    return render(request, 'update.html')
+    global update_user
+
+    if request.method == 'POST':
+        update_user = PgSignInRegister(request.POST)
+
+        name = register.fields['name']
+        email = register.fields['email']
+        password = register.fields['password']
+
+        pg_user_db.insert_new_data_pg(name, email, password)
+
+        if update_user.is_valid():
+            print(F'Data Added: Name = {name}, Email = {email}, Password = {password}')
+            redirect('/')
+        else:
+            raise RuntimeError('Failed to register user')
+
+    # Context Register Data
+    update_data_context = {
+        'update_data': update_user,
+    }
+
+    return render(request, 'update.html', update_data_context)
 
 
 def signin(request: HttpRequest):
@@ -143,7 +166,29 @@ def signin(request: HttpRequest):
 
     """
 
-    return render(request, 'signin.html')
+    global register
+
+    if request.method == 'POST':
+        register = PgSignInRegister(request.POST)
+
+        name = register.fields['name']
+        email = register.fields['email']
+        password = register.fields['password']
+
+        pg_user_db.insert_new_data_pg(name, email, password)
+
+        if register.is_valid():
+            print(F'Data Added: Name = {name}, Email = {email}, Password = {password}')
+            redirect('/')
+        else:
+            raise RuntimeError('Failed to register user')
+
+    # Context Register Data
+    register_data_context = {
+        'register_data': register
+    }
+
+    return render(request, 'signin.html', register_data_context)
 
 
 def login(request: HttpRequest):
@@ -160,3 +205,38 @@ def login(request: HttpRequest):
     """
 
     return render(request, 'login.html')
+
+
+def delete(request: HttpRequest):
+    """
+
+    Generating HTML Update page results.
+
+    Args:
+        request: Results requests.
+
+    Returns:
+        rendering page.
+
+    """
+
+    global delete_user
+
+    if request.method == 'POST':
+        delete_user = PgDelete(request.POST)
+        email = register.fields['email']
+
+        pg_user_db.pg_delete_columns(email)
+
+        if delete_user.is_valid():
+            print('Failed to Delete user')
+            redirect('/')
+        else:
+            raise RuntimeError('Failed to DELETE user')
+
+    # Context Register Data
+    delete_data_context = {
+        'delete_data': delete_user
+    }
+
+    return render(request, 'update.html', delete_data_context)
