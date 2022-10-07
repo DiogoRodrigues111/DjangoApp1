@@ -1,4 +1,5 @@
 import pymongo
+from pymongo.errors import PyMongoError
 
 
 def create_instance_new_database(name_db: str, conn_host='mongodb://127.0.0.1:27017/'):
@@ -15,8 +16,11 @@ def create_instance_new_database(name_db: str, conn_host='mongodb://127.0.0.1:27
             Default Host and Port of the MongoDB.
     """
 
-    client = pymongo.MongoClient(conn_host)
-    print('MongoDB: Database created with successful.')
-    create_db = client[name_db if name_db in client.list_database_names() is not None else None]
-    if create_db.list_collection_names():
-        print(f'MongoDB Database Founds: {create_db.list_collection_names()}')
+    try:
+        client = pymongo.MongoClient(conn_host)
+        print('MongoDB: Database created with successful.')
+        create_db = client[name_db]
+        if create_db.list_collection_names():
+            print(f'MongoDB Database Founds: {create_db.list_collection_names()}')
+    except PyMongoError:
+        pass

@@ -1,7 +1,7 @@
 import psycopg2
 from django.shortcuts import redirect
 from psycopg2 import errors
-
+from startapp.forms.forms import PgSignInRegister
 
 """ GLOBALS """
 
@@ -26,16 +26,13 @@ def insert_new_data_pg(name, email, password):
     # Pg SQL Iterations
     global usr_name, usr_email, usr_password
 
-    # Set values the user to global variable.
-    usr_name = name
-    usr_email = email
-    usr_password = password
-
     # Insert values to table.
-    PgVariables.PG_INSERT_DATA_TO_TABLE = \
-        F'INSERT INTO pgUserTab(name, email, password) VALUES ({usr_name}, {usr_email}, {usr_password});'
+    pg_insert_data_to_table = \
+        F'INSERT INTO pgUserTab(id, name, email, password) VALUES (?, {name}, {email}, {password});'
 
-    return PgVariables.PG_INSERT_DATA_TO_TABLE
+    status_added = create_new_cmd_pg(pg_insert_data_to_table)
+
+    return status_added
 
 
 def update_new_table_pg(name, password):
@@ -123,7 +120,7 @@ def create_new_cmd_pg(query):
         DuplicateTable removed that sequence.
 
     Returns:
-        It's returns an connection from psycopg2.connection
+        It's returns a connection from psycopg2.connection
     """
 
     new_instance = psycopg2.connect(dbname='myuserdb', host='localhost', user='root', password='root', port='5432')

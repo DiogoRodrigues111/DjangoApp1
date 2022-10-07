@@ -1,4 +1,4 @@
-from django.forms import forms
+from django.forms import forms, fields, widgets
 
 
 class UploadFileClass(forms.Form):
@@ -6,16 +6,16 @@ class UploadFileClass(forms.Form):
 
 
 class PgSignInRegister(forms.Form):
-    name = forms.CharField(required=True)
-    email = forms.EmailField(required=True)
-    password = forms.PasswordInput(required=True)
+    name = fields.CharField(required=True)
+    email = fields.EmailField(required=True)
+    password = fields.CharField(widget=widgets.PasswordInput(), label='Enter with password')
 
 
 class PgUpdate(forms.Form):
-    name = forms.CharField(required=True)
-    email = forms.EmailField(required=True)
-    password = forms.PasswordInput(required=True)
+    name = fields.CharField(required=True)
+    email = fields.EmailField(required=True)
+    password = fields.CharField(widget=widgets.PasswordInput(), label='Enter with password')
 
 
 class PgDelete(forms.Form):
-    email = forms.EmailField(required=True)
+    email = fields.EmailField(required=True)

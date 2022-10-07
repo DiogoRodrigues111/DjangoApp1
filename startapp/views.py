@@ -8,15 +8,18 @@ from django.shortcuts import redirect
 from .databases.mongodb import mongo_user_db
 from .databases.postgresql import pg_user_db
 
+
 """ GLOBALS """
 
 # Video and Image, iterable with HTML.
-global g_video, g_image
+global g_video, g_image, video, images
 global register, delete_user, update_user
 
 """ CONSTANT """
 
-# Create a table.
+# Create a table in Postgres.
+# TODO:
+#  Possible change location.
 PG_CREATE_TABLE = \
     'CREATE TABLE pgUserTab(id SERIAL PRIMARY KEY NOT NULL, name VARCHAR, email VARCHAR, password VARCHAR);'
 
@@ -30,7 +33,7 @@ def index(request: HttpRequest):
     """
 
     # Context Iterations.
-    global g_video, g_image
+    global g_video, g_image, video, images
 
     if not exists("media/"):
         mkdir("media/")
@@ -44,6 +47,9 @@ def index(request: HttpRequest):
 
     # Take list of the files in media folder.
     foreach_media_folder = listdir('media/')
+
+    video = {'videos' if 'videos' is None else not None}
+    images = {'images' if 'images' is None else not None}
 
     # Make list of 'media/' folder for iterable with files.
     for lst in foreach_media_folder:
@@ -75,10 +81,17 @@ def index(request: HttpRequest):
             g_image = base.split()
             g_video = base.split()
 
+            video = {
+                'videos': g_video,
+            }
+            images = {
+                'images': g_image,
+            }
+
     # Page Context.
     context_for_media = {
-        'images': g_image,
-        'videos': g_video,
+        'images': images,
+        'videos': video,
     }
 
     return render(request, 'default.html', context_for_media)
@@ -131,7 +144,7 @@ def update(request: HttpRequest):
     global update_user
 
     if request.method == 'POST':
-        update_user = PgSignInRegister(request.POST)
+        update_user = PgUpdate(request.POST)
 
         name = register.fields['name']
         email = register.fields['email']
@@ -168,6 +181,8 @@ def signin(request: HttpRequest):
 
     global register
 
+    register = PgSignInRegister()
+
     if request.method == 'POST':
         register = PgSignInRegister(request.POST)
 
@@ -181,11 +196,12 @@ def signin(request: HttpRequest):
             print(F'Data Added: Name = {name}, Email = {email}, Password = {password}')
             redirect('/')
         else:
+            register = PgSignInRegister()
             raise RuntimeError('Failed to register user')
 
-    # Context Register Data
+    # Context Register User Data
     register_data_context = {
-        'register_data': register
+        'register_data': register,
     }
 
     return render(request, 'signin.html', register_data_context)
@@ -236,7 +252,7 @@ def delete(request: HttpRequest):
 
     # Context Register Data
     delete_data_context = {
-        'delete_data': delete_user
+        'delete_data': delete_user,
     }
 
     return render(request, 'update.html', delete_data_context)
