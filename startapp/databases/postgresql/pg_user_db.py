@@ -1,7 +1,7 @@
 import psycopg2
 from django.shortcuts import redirect
 from psycopg2 import errors
-from startapp.forms.forms import PgSignInRegister
+
 
 """ GLOBALS """
 
@@ -23,14 +23,15 @@ class PgVariables:
 def insert_new_data_pg(name, email, password):
     """ Insert into the table. """
 
-    # Pg SQL Iterations
-    global usr_name, usr_email, usr_password
-
     # Insert values to table.
-    pg_insert_data_to_table = \
-        F'INSERT INTO pgUserTab(id, name, email, password) VALUES (?, {name}, {email}, {password});'
+    status_added = None
+    try:
+        pg_insert_data_to_table = \
+            'INSERT INTO pgUserTab(name, email, password) VALUES (%s, %s, %s);' % (name, email, password)
 
-    status_added = create_new_cmd_pg(pg_insert_data_to_table)
+        status_added = create_new_cmd_pg(pg_insert_data_to_table)
+    except errors.UndefinedColumn:
+        pass
 
     return status_added
 

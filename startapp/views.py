@@ -181,20 +181,21 @@ def signin(request: HttpRequest):
 
     global register
 
-    register = PgSignInRegister()
+    register = PgSignInRegister(request.POST)
 
     if request.method == 'POST':
-        register = PgSignInRegister(request.POST)
 
-        name = register.fields['name']
-        email = register.fields['email']
-        password = register.fields['password']
+        """ HINTS: pgusertab.name email password """
+
+        name = request.POST['name']
+        email = request.POST['email']
+        password = request.POST['password']
 
         pg_user_db.insert_new_data_pg(name, email, password)
 
         if register.is_valid():
             print(F'Data Added: Name = {name}, Email = {email}, Password = {password}')
-            redirect('/')
+            #redirect('/')
         else:
             register = PgSignInRegister()
             raise RuntimeError('Failed to register user')

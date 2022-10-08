@@ -1,4 +1,4 @@
-from django.forms import forms, fields, widgets
+from django.forms import forms, fields, widgets, models
 
 
 class UploadFileClass(forms.Form):
