@@ -21,7 +21,7 @@ global register, delete_user, update_user
 # TODO:
 #  Possible change location.
 PG_CREATE_TABLE = \
-    'CREATE TABLE pgUserTab(id SERIAL PRIMARY KEY NOT NULL, name VARCHAR, email VARCHAR, password VARCHAR);'
+    'CREATE TABLE pgUserTab(id SERIAL PRIMARY KEY NOT NULL, name VARCHAR(50), email VARCHAR(50), password VARCHAR(50));'
 
 
 def index(request: HttpRequest):

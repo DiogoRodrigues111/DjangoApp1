@@ -21,17 +21,32 @@ class PgVariables:
 
 
 def insert_new_data_pg(name, email, password):
-    """ Insert into the table. """
+    """
+
+    Insert into the table.
+
+    Args:
+        name:
+            Data's for insert to columns Name.
+
+        email:
+            Data's for insert in columns Email.
+
+        password:
+            Data's to add in columns Password.
+
+    Returns:
+        Status Added, or data's added with success.
+
+    """
 
     # Insert values to table.
-    status_added = None
-    try:
-        pg_insert_data_to_table = \
-            'INSERT INTO pgUserTab(name, email, password) VALUES (%s, %s, %s);' % (name, email, password)
+   #pg_insert_data_to_table = \
+   #     'INSERT INTO pgUserTab(name, email, password) VALUES (%s, %s, %s);' % (name, email, password)
+    pg_insert_data_to_table = \
+         F'INSERT INTO pgUserTab(name, email, password) VALUES (%s, %s, %s)'
 
-        status_added = create_new_cmd_pg(pg_insert_data_to_table)
-    except errors.UndefinedColumn:
-        pass
+    status_added = create_new_cmd_pg(pg_insert_data_to_table, seq=(name, email, password))
 
     return status_added
 
@@ -110,7 +125,7 @@ def pg_delete_columns(email):
         raise RuntimeError('Not can be DELETE values on Database. Something Wrong occur.')
 
 
-def create_new_cmd_pg(query):
+def create_new_cmd_pg(query, seq=None):
     """
     Create Command-Line for query and commit sequence to Postgres.
 
@@ -133,7 +148,7 @@ def create_new_cmd_pg(query):
     # Open the cursor to perform database operations.
     cursor = new_instance.cursor()
     try:
-        cursor.execute(query)
+        cursor.execute(query, seq)
         print(f'Query Executed: {query}')
         new_instance.commit()
     except errors.DuplicateTable:
