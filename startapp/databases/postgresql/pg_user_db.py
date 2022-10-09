@@ -3,23 +3,6 @@ from django.shortcuts import redirect
 from psycopg2 import errors
 
 
-""" GLOBALS """
-
-""" Postgres constant variables. """
-# That variable is GET in the Forms, and not POST.
-global usr_name, usr_email, usr_password
-
-
-""" CONSTANTS """
-
-
-class PgVariables:
-    """ Get and Set, properties """
-
-    PG_INSERT_DATA_TO_TABLE: str
-    PG_UPDATE_WITH_PASSWORD: str
-
-
 def insert_new_data_pg(name, email, password):
     """
 
@@ -40,9 +23,9 @@ def insert_new_data_pg(name, email, password):
 
     """
 
+    global usr_email
+
     # Insert values to table.
-   #pg_insert_data_to_table = \
-   #     'INSERT INTO pgUserTab(name, email, password) VALUES (%s, %s, %s);' % (name, email, password)
     pg_insert_data_to_table = \
          F'INSERT INTO pgUserTab(name, email, password) VALUES (%s, %s, %s)'
 
@@ -51,7 +34,7 @@ def insert_new_data_pg(name, email, password):
     return status_added
 
 
-def update_new_table_pg(name, password):
+def update_new_table_pg(name, password, email):
     """
 
     Update Postgresql for new values table.
@@ -68,39 +51,13 @@ def update_new_table_pg(name, password):
 
     """
 
-    # Pg SQL Iterations
-    global usr_name, usr_email, usr_password
-
-    # TODO:
-    #   Get iteration with globals variables, before insert datas.
-    #   Find in Database name values,
-    #   Find and check if email is correspond with Database values inserts.
-    #   Check if password really exists for others datas inserted.
-
     # Update table with password of the user.
-    PgVariables.PG_UPDATE_WITH_PASSWORD = \
-        F'UPDATE pgUserTab SET name = {name}, password = {password} WHERE email = {usr_email};'
+    pg_update_with_email = \
+        F'UPDATE pgUserTab SET name = %s, password = %s WHERE email = %s'
 
-    if PgVariables.PG_UPDATE_WITH_PASSWORD:
+    status_added = create_new_cmd_pg(pg_update_with_email, seq=(name, password, email))
 
-        # Get new values of the globals variables.
-        # This is Get properties
-
-        usr_name = name
-        usr_password = password
-
-        redirect('/')
-
-    else:
-        # Failed to access user email on database.
-        redirect('/update')
-
-        # Debug.
-        print('CHECK_EMAIL is not equal to Email registered in Database.')
-        # Launching an Exception RuntimeError.
-        raise RuntimeError('CHECK_EMAIL is not equal to Email registered in Database.')
-
-    return PgVariables.PG_UPDATE_WITH_PASSWORD
+    return status_added
 
 
 def pg_delete_columns(email):

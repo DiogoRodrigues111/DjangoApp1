@@ -143,17 +143,18 @@ def update(request: HttpRequest):
 
     global update_user
 
+    update_user = PgUpdate(request.POST)
+
     if request.method == 'POST':
-        update_user = PgUpdate(request.POST)
 
-        name = register.fields['name']
-        email = register.fields['email']
-        password = register.fields['password']
+        name = request.POST['name']
+        password = request.POST['password']
+        email = request.POST['email']
 
-        pg_user_db.insert_new_data_pg(name, email, password)
+        pg_user_db.update_new_table_pg(name, password, email)
 
         if update_user.is_valid():
-            print(F'Data Added: Name = {name}, Email = {email}, Password = {password}')
+            print(F'Data Updated: Name = {name}, Email = {email}, Password = {password}')
             redirect('/')
         else:
             raise RuntimeError('Failed to register user')
@@ -195,7 +196,7 @@ def signin(request: HttpRequest):
 
         if register.is_valid():
             print(F'Data Added: Name = {name}, Email = {email}, Password = {password}')
-            #redirect('/')
+            redirect('/')
         else:
             register = PgSignInRegister()
             raise RuntimeError('Failed to register user')
