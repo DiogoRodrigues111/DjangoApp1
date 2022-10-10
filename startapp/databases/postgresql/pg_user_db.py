@@ -1,5 +1,4 @@
 import psycopg2
-from django.shortcuts import redirect
 from psycopg2 import errors
 
 
@@ -23,11 +22,9 @@ def insert_new_data_pg(name, email, password):
 
     """
 
-    global usr_email
-
     # Insert values to table.
     pg_insert_data_to_table = \
-         F'INSERT INTO pgUserTab(name, email, password) VALUES (%s, %s, %s)'
+        F'INSERT INTO pgUserTab(name, email, password) VALUES (%s, %s, %s)'
 
     status_added = create_new_cmd_pg(pg_insert_data_to_table, seq=(name, email, password))
 
@@ -49,6 +46,9 @@ def update_new_table_pg(name, password, email):
         password:
             This is really go changed.
 
+        email:
+            Email the user, for check it. And then UPDATED.
+
     """
 
     # Update table with password of the user.
@@ -64,22 +64,25 @@ def pg_delete_columns(email):
     """
     Delete datas on Databases.
 
+    Obs:
+        It is not can be recovery.
+
     Args:
         email:
             That routine take values of the email, and then delete if possible.
+
+    Returns:
+        Status Added to delete user.
 
     """
 
     """ That operation not can be reversible. """
 
-    global usr_name, usr_email, usr_password
+    pg_delete_user = 'DELETE FROM pgUserTab WHERE email=%s'
 
-    if email is usr_email:
-        usr_name = ''
-        usr_email = ''
-        usr_password = ''
-    else:
-        raise RuntimeError('Not can be DELETE values on Database. Something Wrong occur.')
+    status_added = create_new_cmd_pg(pg_delete_user, seq=email)
+
+    return status_added
 
 
 def create_new_cmd_pg(query, seq=None):
@@ -87,7 +90,11 @@ def create_new_cmd_pg(query, seq=None):
     Create Command-Line for query and commit sequence to Postgres.
 
     Args:
-        query: Is a Command-Line.
+        query:
+            Is a Command-Line.
+
+        seq:
+            Is Args of the query
 
     See:
         DuplicateTable removed that sequence.

@@ -198,7 +198,6 @@ def signin(request: HttpRequest):
             print(F'Data Added: Name = {name}, Email = {email}, Password = {password}')
             redirect('/')
         else:
-            register = PgSignInRegister()
             raise RuntimeError('Failed to register user')
 
     # Context Register User Data
@@ -240,14 +239,16 @@ def delete(request: HttpRequest):
 
     global delete_user
 
+    delete_user = PgDelete(request.POST)
+
     if request.method == 'POST':
-        delete_user = PgDelete(request.POST)
-        email = register.fields['email']
+
+        email = request.POST['email']
 
         pg_user_db.pg_delete_columns(email)
 
         if delete_user.is_valid():
-            print('Failed to Delete user')
+            print(F'User Deleted with success with values: Email = {email}')
             redirect('/')
         else:
             raise RuntimeError('Failed to DELETE user')
@@ -257,4 +258,4 @@ def delete(request: HttpRequest):
         'delete_data': delete_user,
     }
 
-    return render(request, 'update.html', delete_data_context)
+    return render(request, 'delete.html', delete_data_context)
