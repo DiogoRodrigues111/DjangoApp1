@@ -1,3 +1,5 @@
+from distutils.util import execute
+from sys import executable
 import psycopg2
 from psycopg2 import errors
 
@@ -24,7 +26,7 @@ def insert_new_data_pg(name, email, password):
 
     # Insert values to table.
     pg_insert_data_to_table = \
-        F'INSERT INTO pgUserTab(name, email, password) VALUES (%s, %s, %s)'
+        R'INSERT INTO pgUserTab(name, email, password) VALUES (%s, %s, %s)'
 
     status_added = create_new_cmd_pg(pg_insert_data_to_table, seq=(name, email, password))
 
@@ -53,7 +55,7 @@ def update_new_table_pg(name, password, email):
 
     # Update table with password of the user.
     pg_update_with_email = \
-        F'UPDATE pgUserTab SET name = %s, password = %s WHERE email = %s'
+        R'UPDATE pgUserTab SET name = %s, password = %s WHERE email = %s'
 
     status_added = create_new_cmd_pg(pg_update_with_email, seq=(name, password, email))
 
@@ -79,11 +81,9 @@ def pg_delete_columns(email):
 
     """ That operation not can be reversible. """
 
-    pg_delete_user = 'DELETE FROM pgUserTab WHERE email=%s'
+    create_new_cmd_pg(query='''DELETE FROM pgUserTab WHERE email=%s;''', seq=(email,))
 
-    status_added = create_new_cmd_pg(pg_delete_user, seq=email)
-
-    return status_added
+    return None
 
 
 def create_new_cmd_pg(query, seq=None):
