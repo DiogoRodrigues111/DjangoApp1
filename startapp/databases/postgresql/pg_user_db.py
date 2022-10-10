@@ -62,6 +62,7 @@ def update_new_table_pg(name, password, email):
 
 def pg_delete_columns(email):
     """
+
     Delete datas on Databases.
 
     Obs:
@@ -87,6 +88,7 @@ def pg_delete_columns(email):
 
 def create_new_cmd_pg(query, seq=None):
     """
+
     Create Command-Line for query and commit sequence to Postgres.
 
     Args:
@@ -101,6 +103,7 @@ def create_new_cmd_pg(query, seq=None):
 
     Returns:
         It's returns a connection from psycopg2.connection
+
     """
 
     new_instance = psycopg2.connect(dbname='myuserdb', host='localhost', user='root', password='root', port='5432')
