@@ -1,4 +1,4 @@
-from django.forms import forms, fields, widgets, models
+from django.forms import BooleanField, forms, fields, widgets, models
 
 
 class UploadFileClass(forms.Form):
@@ -8,7 +8,8 @@ class UploadFileClass(forms.Form):
 class PgSignInRegister(forms.Form):
     name = fields.CharField(required=True)
     email = fields.EmailField(required=True)
-    password = fields.CharField(widget=widgets.PasswordInput(), label='Enter with password')
+    password = fields.CharField(required=True, widget=widgets.PasswordInput(), label='Enter with password')
+    bool_banned = fields.BooleanField(initial=False, required=False, show_hidden_initial=True)
 
 
 class PgUpdate(forms.Form):
@@ -18,4 +19,8 @@ class PgUpdate(forms.Form):
 
 
 class PgDelete(forms.Form):
+    email = fields.EmailField(required=True)
+
+class PgBanned(forms.Form):
+    bool_banned = fields.BooleanField(initial=False, required=False)
     email = fields.EmailField(required=True)

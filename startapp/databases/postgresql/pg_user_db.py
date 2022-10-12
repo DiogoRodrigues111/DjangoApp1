@@ -4,7 +4,7 @@ import psycopg2
 from psycopg2 import errors
 
 
-def insert_new_data_pg(name, email, password):
+def insert_new_data_pg(name, email, password, is_banned: bool):
     """
 
     Insert into the table.
@@ -19,6 +19,9 @@ def insert_new_data_pg(name, email, password):
         password:
             Data's to add in columns Password.
 
+        is_banned:
+            If user take banned. It is a number.
+
     Returns:
         Status Added, or data's added with success.
 
@@ -26,9 +29,9 @@ def insert_new_data_pg(name, email, password):
 
     # Insert values to table.
     pg_insert_data_to_table = \
-        R'INSERT INTO pgUserTab(name, email, password) VALUES (%s, %s, %s)'
+        F'INSERT INTO pgUserTab(name, email, password, is_banned) VALUES (%s, %s, %s, %s)'
 
-    status_added = create_new_cmd_pg(pg_insert_data_to_table, seq=(name, email, password))
+    status_added = create_new_cmd_pg(pg_insert_data_to_table, seq=(name, email, password, is_banned))
 
     return status_added
 
@@ -84,6 +87,48 @@ def pg_delete_columns(email):
     create_new_cmd_pg(query='''DELETE FROM pgUserTab WHERE email=%s;''', seq=(email,))
 
     return None
+
+def pg_drop_if_exists(table_name):
+    """ 
+    
+    Drop if exists the table in database.
+
+    Args:
+        table_name:
+            Name of the Table in database registered.
+
+    Returns:
+        SQL command line working.
+
+     """
+
+    pg_drop_table = "DROP TABLE pgUserTab;"
+    status_added = create_new_cmd_pg(pg_drop_table)
+
+    return status_added
+
+def pg_user_banned(is_banned, email):
+    """
+    
+    User can be banned.
+
+    This operation can be recovered, with update.
+
+    Args:
+        is_banned:
+            If user is banned. ( It is a number. 0 or 1 ).
+
+        email:
+            Is email of the user to be Banned.
+
+    Returns:
+        Status working, User Banned.
+    """
+
+    pg_user_banned = "UPDATE pgUserTab SET is_banned = %d WHERE email = %s"
+    status_added = create_new_cmd_pg(pg_user_banned, seq=(is_banned, email))
+
+    return status_added
 
 
 def create_new_cmd_pg(query, seq=None):

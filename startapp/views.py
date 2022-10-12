@@ -5,18 +5,19 @@ from os import mkdir, listdir, path
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from urllib3 import HTTPResponse
-from .forms.forms import UploadFileClass, PgSignInRegister, PgUpdate, PgDelete
+from .forms.forms import PgBanned, UploadFileClass, PgSignInRegister, PgUpdate, PgDelete
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
 from .databases.mongodb import mongo_user_db
 from .databases.postgresql import pg_user_db
 from .cookies.cookies_rec import CookiesRecord
+from django.utils.datastructures import MultiValueDictKeyError
 
 """ GLOBALS """
 
 # Video and Image, iterable with HTML.
 global g_video, g_image, video, images
-global register, delete_user, update_user
+global register, delete_user, update_user, banned_user
 
 """ CONSTANT """
 
@@ -24,7 +25,7 @@ global register, delete_user, update_user
 # TODO:
 #  Possible change location.
 PG_CREATE_TABLE = \
-    'CREATE TABLE pgUserTab(id SERIAL PRIMARY KEY NOT NULL, name VARCHAR(50), email VARCHAR(50), password VARCHAR(50));'
+    'CREATE TABLE pgUserTab(id SERIAL PRIMARY KEY NOT NULL, name VARCHAR(50), email VARCHAR(50), password VARCHAR(50), is_banned BOOLEAN);'
 
 
 def index(request: HttpRequest):
@@ -200,10 +201,17 @@ def signin(request: HttpRequest):
         email = request.POST['email']
         password = request.POST['password']
 
-        pg_user_db.insert_new_data_pg(name, email, password)
+        banned = None
+
+        try:
+            banned = request.POST['bool_banned'] if banned is not True else False
+        except MultiValueDictKeyError:
+            pass
+
+        pg_user_db.insert_new_data_pg(name, email, password, banned)
 
         if register.is_valid():
-            print(F'Data Added: Name = {name}, Email = {email}, Password = {password}')
+            print(F'Data Added: Name = {name}, Email = {email}, Password = {password}, Banned: {banned}')
             redirect('/')
         else:
             raise RuntimeError('Failed to register user')
@@ -267,3 +275,40 @@ def delete(request: HttpRequest):
     }
 
     return render(request, 'delete.html', delete_data_context)
+
+def banned(request: HttpRequest):
+    """
+
+    Generating HTML Update page results.
+
+    Args:
+        request: Results requests.
+
+    Returns:
+        rendering page.
+
+    """
+
+    global banned_user
+
+    banned_user = PgBanned(request.POST)
+
+    if request.method == 'POST':
+
+        email = request.POST['email']
+        banned = request.POST['bool_banned']
+
+        pg_user_db.pg_user_banned(banned, email)
+
+        if banned_user.is_valid():
+            print(F'User User Banned with success with values: Email = {email} Banned: {banned}')
+            redirect('/')
+        else:
+            raise RuntimeError('Failed to BANNING user.')
+
+    # Context Register Data
+    user_banned_context = {
+        'user_banned_data': banned_user,
+    }
+
+    return render(request, 'delete.html',user_banned_context)
