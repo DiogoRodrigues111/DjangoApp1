@@ -1,13 +1,16 @@
 from genericpath import exists
+from http import cookies
+from logging.config import valid_ident
 from os import mkdir, listdir, path
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from urllib3 import HTTPResponse
 from .forms.forms import UploadFileClass, PgSignInRegister, PgUpdate, PgDelete
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
 from .databases.mongodb import mongo_user_db
 from .databases.postgresql import pg_user_db
-
+from .cookies.cookies_rec import CookiesRecord
 
 """ GLOBALS """
 
@@ -40,10 +43,15 @@ def index(request: HttpRequest):
 
     """ When entry in home page the database, is created automatically. """
 
+    # Cookies
+    CookiesRecord.cookies_new(response=HttpResponse("Cookies Created!"))
+
     # MongoDB
     mongo_user_db.create_instance_new_database('mongo_UserDB')
     # Postgres
     pg_user_db.create_new_cmd_pg(PG_CREATE_TABLE)
+
+    """ Create a iteration with HTML for the media folder. """
 
     # Take list of the files in media folder.
     foreach_media_folder = listdir('media/')
