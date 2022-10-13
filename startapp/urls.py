@@ -16,5 +16,5 @@ urlpatterns = [
     path('signin', views.signin),
     path('login', views.login),
     path('delete', views.delete),
-    path('banned', views.banned),
+    path('banned', views.banned)
 ] + static(settings.STATIC_CSS_URL, document_root=settings.STATIC_CSS_ROOT)

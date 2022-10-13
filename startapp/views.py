@@ -281,6 +281,8 @@ def banned(request: HttpRequest):
 
     Generating HTML Update page results.
 
+    Entry in this page for only banned user.
+
     Args:
         request: Results requests.
 
@@ -289,6 +291,8 @@ def banned(request: HttpRequest):
 
     """
 
+    """ If you stay in this page, then it is for banned some user. """
+
     global banned_user
 
     banned_user = PgBanned(request.POST)
@@ -296,19 +300,22 @@ def banned(request: HttpRequest):
     if request.method == 'POST':
 
         email = request.POST['email']
+
+        # Result is always true.
+        # This checking only work if stay checked.
         banned = request.POST['bool_banned']
 
         pg_user_db.pg_user_banned(banned, email)
 
         if banned_user.is_valid():
-            print(F'User User Banned with success with values: Email = {email} Banned: {banned}')
+            print(F'User Banned with success with values: Email = {email} Banned: {banned}')
             redirect('/')
         else:
-            raise RuntimeError('Failed to BANNING user.')
+            raise RuntimeError(F'Failed to BANNING user. with Email: {email}. Check right email digited.')
 
     # Context Register Data
     user_banned_context = {
         'user_banned_data': banned_user,
     }
 
-    return render(request, 'delete.html',user_banned_context)
+    return render(request, 'banned.html', user_banned_context)

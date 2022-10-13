@@ -125,7 +125,7 @@ def pg_user_banned(is_banned, email):
         Status working, User Banned.
     """
 
-    pg_user_banned = "UPDATE pgUserTab SET is_banned = %d WHERE email = %s"
+    pg_user_banned = "UPDATE pgUserTab SET is_banned = %s WHERE email = %s"
     status_added = create_new_cmd_pg(pg_user_banned, seq=(is_banned, email))
 
     return status_added

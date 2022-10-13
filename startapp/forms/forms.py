@@ -22,5 +22,5 @@ class PgDelete(forms.Form):
     email = fields.EmailField(required=True)
 
 class PgBanned(forms.Form):
-    bool_banned = fields.BooleanField(initial=False, required=False)
+    bool_banned = fields.BooleanField(initial=False, required=True)
     email = fields.EmailField(required=True)
