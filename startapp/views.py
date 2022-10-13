@@ -5,7 +5,14 @@ from os import mkdir, listdir, path
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from urllib3 import HTTPResponse
-from .forms.forms import PgBanned, UploadFileClass, PgSignInRegister, PgUpdate, PgDelete
+from .forms.forms import(
+     PgBanned
+     , UploadFileClass
+     , PgSignInRegister
+     , PgUpdate
+     , PgDelete
+     , PgUnbanned
+)
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
 from .databases.mongodb import mongo_user_db
@@ -17,7 +24,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 
 # Video and Image, iterable with HTML.
 global g_video, g_image, video, images
-global register, delete_user, update_user, banned_user
+global register, delete_user, update_user, banned_user, desbanned
 
 """ CONSTANT """
 
@@ -319,3 +326,46 @@ def banned(request: HttpRequest):
     }
 
     return render(request, 'banned.html', user_banned_context)
+
+
+def unbanned(request: HttpRequest):
+    """
+    
+    Generating HTML Update page results.
+
+    Entry in this page for only unbanned user.
+
+    Args:
+        request: Results requests.
+
+    Returns:
+        rendering page.
+
+    """
+
+    global desbanned
+
+    desbanned = PgUnbanned(request.POST)
+
+    if request.method == 'POST':
+
+        email = request.POST['email']
+
+        # Result is always true.
+        # This checking only work if stay checked.
+        banned = request.POST['bool_banned'] if not True else False or False
+
+        pg_user_db.pg_user_banned(banned, email)
+
+        if desbanned.is_valid():
+            print(F'User UnBanned with success with values: Email = {email} Banned: {banned}')
+            redirect('/')
+        else:
+            raise RuntimeError(F'Failed to Unbanning user. with Email: {email}. Check right email digited.')
+
+    # Context Register Data
+    user_banned_context = {
+        'unbanned_data': desbanned,
+    }
+
+    return render(request, 'unbanned.html', user_banned_context)
