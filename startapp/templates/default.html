@@ -8,18 +8,28 @@
     <link rel="stylesheet" type="text/css" href="{% static STATIC_CSS_URL %}css/site.css"/>
 </head>
 <body>
-    {% load static %}
-
-    {% for i in images %}
-        <a href="media/{{ i }}">
-            <img class="border-rounded" src="media/{{ i }}" width="210" height="210"/>
-        </a>
+    {% block images %}
+    {% if images is not None %}
+    {% for img in images %}
+    <a href="media/images/{{ img }}">
+        <img class="border-rounded" src="media/images/{{ img }}" width="210" height="210"/>
+    </a>
     {% endfor %}
+    {% else %}
+        pass_img
+    {% endif %}
+    {% endblock %}
 
-    {% for v in videos %}
-         <video controls loop width="210" height="210">
-            <source class="border-rounded" src="media/{{ v }}" type="video/mp4">
-        </video>
+    {% block videos %}
+    {% if videos is not None %}
+    {% for vd in videos %}
+    <video controls loop width="210" height="210">
+        <source class="border-rounded" src="media/videos/{{ vd }}" type="video/mp4">
+    </video>
     {% endfor %}
+    {% else %}
+        pass_videos
+    {% endif %}
+    {% endblock %}
 </body>
 </html>

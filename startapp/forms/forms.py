@@ -30,3 +30,11 @@ class PgBanned(forms.Form):
 class PgUnbanned(forms.Form):
     bool_banned = fields.BooleanField(initial=True, required=False)
     email = fields.EmailField(required=True)
+
+
+class HTMLImage():
+    pass
+
+
+class HTMLVideo():
+    pass

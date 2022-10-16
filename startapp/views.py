@@ -23,7 +23,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 """ GLOBALS """
 
 # Video and Image, iterable with HTML.
-global g_video, g_image, video, images
+global g_video, g_image
 global register, delete_user, update_user, banned_user, desbanned
 
 """ CONSTANT """
@@ -44,10 +44,16 @@ def index(request: HttpRequest):
     """
 
     # Context Iterations.
-    global g_video, g_image, video, images
+    global g_video, g_image
 
     if not exists("media/"):
         mkdir("media/")
+
+    if not exists("media/videos/"):
+        mkdir("media/videos/")
+
+    if not exists("media/images/"):
+        mkdir("media/images/")
 
     """ When entry in home page the database, is created automatically. """
 
@@ -62,52 +68,55 @@ def index(request: HttpRequest):
     """ Create a iteration with HTML for the media folder. """
 
     # Take list of the files in media folder.
-    foreach_media_folder = listdir('media/')
+    foreach_media_videos = listdir("media/videos/")
+    foreach_media_images = listdir("media/images/")
 
-    video = {'videos' if 'videos' is None else not None}
-    images = {'images' if 'images' is None else not None}
+    g_image = {}
+    g_video = {}
 
     # Make list of 'media/' folder for iterable with files.
-    for lst in foreach_media_folder:
+    for lst_img in foreach_media_images:
 
         """
         
-        Only locking in JPG and MP4.
+        Only locking in JPG.
         Record values of the variable for print in Context.
         And take something value of the 'lst' iterator.
         
         """
 
         # Take values of the paths iterating.
-        base = path.basename(lst)
+        base = path.basename(lst_img)
 
         # The base is always > than one.
-        if base.count(lst) > 0:
+        if base.count(lst_img) > 0:
             # Iterable with JPG files.
-            if base.endswith('.jpg'):
-                image_source = base.split()
-                g_image = base.format(*image_source).split()
-
-            # Iterable with MP4 files.
-            if base.endswith('.mp4'):
-                video_source = base.split()
-                g_video = base.format(*video_source).split()
-        else:
-            # Return then ...
             g_image = base.split()
+
+
+    # Make list of 'media/' folder for iterable with files.
+    for lst_vd in foreach_media_videos:
+
+        """
+        
+        Only locking in MP4.
+        Record values of the variable for print in Context.
+        And take something value of the 'lst' iterator.
+        
+        """
+
+        # Take values of the paths iterating.
+        base = path.basename(lst_vd)
+
+        if base.count(lst_vd) > 0:
+            # Iterable with MP4 files.
             g_video = base.split()
 
-            video = {
-                'videos': g_video,
-            }
-            images = {
-                'images': g_image,
-            }
 
     # Page Context.
     context_for_media = {
-        'images': images,
-        'videos': video,
+        'images': g_image,
+        'videos': g_video,
     }
 
     return render(request, 'default.html', context_for_media)
