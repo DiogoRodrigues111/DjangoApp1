@@ -1,0 +1,1 @@
+sudo mongo mongodb://localhost:27017
