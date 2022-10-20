@@ -1,10 +1,7 @@
 from genericpath import exists
-from http import cookies
-from logging.config import valid_ident
 from os import mkdir, listdir, path
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
-from urllib3 import HTTPResponse
 from .forms.forms import(
      PgBanned
      , UploadFileClass
@@ -61,7 +58,8 @@ def index(request: HttpRequest):
     CookiesRecord.cookies_new(response=HttpResponse("Cookies Created!"))
 
     # MongoDB
-    mongo_user_db.create_instance_new_database('mongo_UserDB')
+    mongo_user_db.create_instance_new_database('mongo_UserDB', "User_Collect")
+
     # Postgres
     pg_user_db.create_new_cmd_pg(PG_CREATE_TABLE)
 

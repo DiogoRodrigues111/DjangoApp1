@@ -2,7 +2,7 @@ import pymongo
 from pymongo.errors import CollectionInvalid
 
 
-def create_instance_new_database(name_db: str, conn_host='mongodb://127.0.0.1:27017/'):
+def create_instance_new_database(name_db: str, table_name: str, conn_host='mongodb://127.0.0.1:27017/'):
     """
     Create an new instance of the databases for MongoDB.
 
@@ -12,13 +12,17 @@ def create_instance_new_database(name_db: str, conn_host='mongodb://127.0.0.1:27
         name_db
             Name of Database for creating.
 
+        table_name:
+            It is a name of the table for created for name_db.
+
         conn_host
             Default Host and Port of the MongoDB.
     """
+
     try:
         client = pymongo.MongoClient(conn_host)
         print('MongoDB: Database created with successful.')
-        create_db = client[name_db].create_collection(name_db)
+        create_db = client[name_db].create_collection(table_name)
     except CollectionInvalid:
         pass
 
