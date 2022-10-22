@@ -40,17 +40,8 @@ def index(request: HttpRequest):
         rendering page
     """
 
-    # Context Iterations.
-    global g_video, g_image
-
     if not exists("media/"):
         mkdir("media/")
-
-    if not exists("media/videos/"):
-        mkdir("media/videos/")
-
-    if not exists("media/images/"):
-        mkdir("media/images/")
 
     """ When entry in home page the database, is created automatically. """
 
@@ -65,59 +56,43 @@ def index(request: HttpRequest):
 
     """ Create a iteration with HTML for the media folder. """
 
-    # Take list of the files in media folder.
-    foreach_media_videos = listdir("media/videos/")
-    foreach_media_images = listdir("media/images/")
-
-    g_image = {}
-    g_video = {}
-
-    # Make list of 'media/' folder for iterable with files.
-    for lst_img in foreach_media_images:
-
-        """
-        
-        Only locking in JPG.
-        Record values of the variable for print in Context.
-        And take something value of the 'lst' iterator.
-        
-        """
-
-        # Take values of the paths iterating.
-        base = path.basename(lst_img)
-
-        # The base is always > than one.
-        if base.count(lst_img) > 0:
-            # Iterable with JPG files.
-            g_image = base.split()
-
-
-    # Make list of 'media/' folder for iterable with files.
-    for lst_vd in foreach_media_videos:
-
-        """
-        
-        Only locking in MP4.
-        Record values of the variable for print in Context.
-        And take something value of the 'lst' iterator.
-        
-        """
-
-        # Take values of the paths iterating.
-        base = path.basename(lst_vd)
-
-        if base.count(lst_vd) > 0:
-            # Iterable with MP4 files.
-            g_video = base.split()
-
-
-    # Page Context.
-    context_for_media = {
-        'images': g_image,
-        'videos': g_video,
+    context_page = {
+        "Videos": index_videos(),
+        "Images": index_images()
     }
 
-    return render(request, 'default.html', context_for_media)
+    return render(request, 'default.html', context_page)
+
+
+def index_videos():
+    """
+    Generating HTML Index page results.
+
+    It is an extended function.
+
+    Returns:
+        rendering page
+    """
+
+    # Take list of the files in media folder.
+    foreach_media = listdir("media/")
+
+    return [i for i in foreach_media if i.endswith(".mp4")]
+
+def index_images():
+    """
+    Generating HTML Index page results.
+
+    It is an extended function.
+
+    Returns:
+        rendering page
+    """
+
+    # Take list of the files in media folder.
+    foreach_media = listdir("media/")
+
+    return [i for i in foreach_media if i.endswith(".jpg")]
 
 
 def upload(request: HttpRequest):
@@ -138,7 +113,6 @@ def upload(request: HttpRequest):
         fs = FileSystemStorage()
         file_name = fs.save(file_upload.name, file_upload)
 
-        # test without this
         fs.url(file_name)
 
         if form.is_valid():
