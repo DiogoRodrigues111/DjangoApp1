@@ -1,0 +1,12 @@
+
+# 1 - Use this for install
+sudo snap install google-cloud-sdk --classic
+
+# 2 - For obtains login with browser
+gcloud auth login
+
+# 3 - Use this for changed to PROJECT_ID
+gcloud config set project PROJECT_ID
+
+# 3.1 - Use this for changed.
+gcloud config set project djangoapp-366400

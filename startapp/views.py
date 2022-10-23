@@ -20,7 +20,6 @@ from django.utils.datastructures import MultiValueDictKeyError
 """ GLOBALS """
 
 # Video and Image, iterable with HTML.
-global g_video, g_image
 global register, delete_user, update_user, banned_user, desbanned
 
 """ CONSTANT """
