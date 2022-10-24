@@ -1,16 +1,13 @@
 from google.cloud import storage
 
-def create_new_bucket_google_cloud(name_client, blob_name):
+def create_new_bucket_google_cloud(bucket_name):
     """
 
     Create new databases for Google cloud.
 
     Args:
-        name:
+        bucket_name:
             Name of Storage Bucket identified.
-
-        blob_name:
-            Name the Blob Storage.
 
     Returns:
             Bucket Client created with success.
@@ -20,19 +17,20 @@ def create_new_bucket_google_cloud(name_client, blob_name):
     """ Creating credentials for Google Cloud Storage. """
 
     client = storage.Client()
-    blob_entity = storage.bucket.Bucket(client, name_client)
-    blob_created = blob_entity.blob(blob_name)
+    bucket_entity = client.bucket(bucket_name)
+    bucket_entity.location = "PT-BR"
+    bucket_entity = client.create_bucket(bucket_entity)
 
     """ Check if necessary commands """
 
-    if blob_created.exists(client):
+    if bucket_entity.exists(client):
         print("Bucket created with success, please check it in google cloud platforms.")
     else:
         print("Failed to creating Bucket. Please check it.")
 
-    if not blob_created:
+    if not bucket_entity:
         print("Try in Retry failed.")
     else:
         pass
 
-    return client
+    return bucket_entity

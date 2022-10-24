@@ -59,7 +59,7 @@ def index(request: HttpRequest):
     """ Google Cloud """
 
     # It made for creating Bucket for Storage
-    storage.create_new_bucket_google_cloud("Bucket_usrClient", "Blob_usrName")
+    storage.create_new_bucket_google_cloud("Bucket_usrClient")
 
     """ Create a iteration with HTML for the media folder. """
 
