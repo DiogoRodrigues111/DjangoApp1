@@ -16,6 +16,7 @@ from .databases.mongodb import mongo_user_db
 from .databases.postgresql import pg_user_db
 from .cookies.cookies_rec import CookiesRecord
 from django.utils.datastructures import MultiValueDictKeyError
+from .cloud.google import storage
 
 """ GLOBALS """
 
@@ -47,11 +48,18 @@ def index(request: HttpRequest):
     # Cookies
     CookiesRecord.cookies_new(response=HttpResponse("Cookies Created!"))
 
+    """ Databases """
+
     # MongoDB
     mongo_user_db.create_instance_new_database('mongo_UserDB', "User_Collect")
 
     # Postgres
     pg_user_db.create_new_cmd_pg(PG_CREATE_TABLE)
+
+    """ Google Cloud """
+
+    # It made for creating Bucket for Storage
+    storage.create_new_bucket_google_cloud("Bucket_usrClient", "Blob_usrName")
 
     """ Create a iteration with HTML for the media folder. """
 

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "djangoapp-366400",
+  "private_key_id": "27c6c0b72706942178765e2e642ec7c3310defca",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQCTLe9pamhQM3wx\nGnUs/0tsQJof/AJTWPOfW0zGu118KEi08C72Lw/1LVnY7BxaZkK1IejosHFTMvNE\nsx3NtF8k6LPy4HziI5SHKn7YhuZLbsr9bLolZyXBxBAaMDKZmWV6eocAl+JuuHLV\nH1MAN2kDSURVi9MbLZCLIq379f8gh8qd9XZan7SzRVQ6zCEmVt8Y5ByYbX2fUysZ\nsXwqp0wp3aipew1MK3FfoAEPCQwcNzWoQuTvRebanGRxcY9fAVGHSKTnmwfysz5R\njafuX7OXPOTrC8MCSnyNO3Dtkl06Zvpn8Id8euXW6QGsV1b8IOxBk3L+ZZMGvs/l\nooolbavNAgMBAAECgf8NSXUOdeiSTqYgH47h+6KFPR0kUkWMomprZYY5uW2XBOi3\nw9eHEn+cRSDwPMmGDWhuyuCuYjOtd2pAavUlulqHhVdE0S9VXzfGEOUXmKe/xs9E\nL4/OdioeUc18zUUjJPQC/Trpk+4kO0UahKUSfVRU8qQpuY6ufA1UYbUjWhCYF6Bs\nHZnXNiV8vWdsyySv61E4cfJgwvc3DaAp2j11WdrnSc3bhar9zJ26K+78gEk8Bz8W\nHZjcUSWNjnxcZnvp86Fja2tzVMQeG9dg/Hh4mSmoIy7RtL8tq+Xw9Qlhhy5oyVk2\n07ENtEEOFcaMxbudlrzxsw5Unl7A5wZCqX754+ECgYEA0Bi33Zlxo+bYBfHnltI0\nymL/v9DUAw3ZHoMb+eRpZQwz8AOCQ0DNnM70wV6tAmP+Qb8jGyszu5KDmy9y+tlp\n0hyaLHjOwYqmz0pKNbZ6wG715R/5wGfdUvYHg2kShIIeH9RbxG8U/ieed/OruQKh\nM+jIs6yeX8VN5/HahFefJbECgYEAtQ9TnCyaze+uIirWJLe4HeM/DstgtveAvtyE\nKVPfJ3FwzQLC7HmoCz6c9mPbzzKE18AgOK4bDSfD+Dhu/MG9MFfoRiCdX2/zrpLZ\n8k9H+yd/KUEdvvTTuUK7+LlJxN1a8Da20h1tLsBMWwndYjbyxWgzgZhaKY5E2Lko\nF1qawt0CgYAw7J7NyrWdAzjmrOj13JXsvznBrycpUKgrNEfviHP+/c94LlsB1MqC\ng2Wn0Mp8NWYhrv5h9NZE0z19zroJn/PxIihdLEnv1tlBAwZPeoeBlpTZOZtOUR0H\n1DAQBTQFU1IhyZuJo1QcLNRk/zTwWl3sBl6pX3wcqBaY4ZOuaatRAQKBgAe0iEVc\nLJZY/dscYZKccuxqsFNL2mjO7Z6xubochKGkFT3UQUFZCAq6dmmR5FfT+Y1I8tYW\nqrYLnC5jEG4XPJrjEtJxLuFR3VfvjfDe6NxKWQIDcGWg+6WlrmQuVnJXTThty6fz\ncqMLsfQp3k8AsaIvBgoc1rFwCYQDlS4xP+bNAoGBAI41VE7cvTcknj73AUhDoeyD\nJlBWLX/TVReLK5bsO9VO6JWFm8RC+eg00afkYrZvutVg2asoPJWzxE7kxH54cCNj\nGORcBIRzdovGBr4kVaBfwzuOtaffeqpgoxntZrY0aGNhvyeF7O9HIKeFkLFqUQFz\nXVoAtyeNtj9NyV2C+NPH\n-----END PRIVATE KEY-----\n",
+  "client_email": "djangoapp-366400@appspot.gserviceaccount.com",
+  "client_id": "104269785025030891569",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/djangoapp-366400%40appspot.gserviceaccount.com"
+}
