@@ -1,4 +1,11 @@
 from google.cloud import storage
+import os
+
+""" CONSTANTS """
+
+# Top-level of the environments set.
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "djangoapp-366400-27c6c0b72706.json"
+
 
 def create_new_bucket_google_cloud(bucket_name):
     """
@@ -17,20 +24,9 @@ def create_new_bucket_google_cloud(bucket_name):
     """ Creating credentials for Google Cloud Storage. """
 
     client = storage.Client()
-    bucket_entity = client.bucket(bucket_name)
-    bucket_entity.location = "PT-BR"
-    bucket_entity = client.create_bucket(bucket_entity)
+    bucket_entity = client.bucket(bucket_name=bucket_name)
+    created_if_not_exists = client.create_bucket(bucket_entity, location="US")
 
     """ Check if necessary commands """
 
-    if bucket_entity.exists(client):
-        print("Bucket created with success, please check it in google cloud platforms.")
-    else:
-        print("Failed to creating Bucket. Please check it.")
-
-    if not bucket_entity:
-        print("Try in Retry failed.")
-    else:
-        pass
-
-    return bucket_entity
+    return created_if_not_exists

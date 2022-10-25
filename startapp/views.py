@@ -2,13 +2,13 @@ from genericpath import exists
 from os import mkdir, listdir, path
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
-from .forms.forms import(
-     PgBanned
-     , UploadFileClass
-     , PgSignInRegister
-     , PgUpdate
-     , PgDelete
-     , PgUnbanned
+from .forms.forms import (
+    PgBanned
+, UploadFileClass
+, PgSignInRegister
+, PgUpdate
+, PgDelete
+, PgUnbanned
 )
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
@@ -16,7 +16,7 @@ from .databases.mongodb import mongo_user_db
 from .databases.postgresql import pg_user_db
 from .cookies.cookies_rec import CookiesRecord
 from django.utils.datastructures import MultiValueDictKeyError
-from .cloud.google import storage
+#from .cloud.google import storage
 
 """ GLOBALS """
 
@@ -29,7 +29,8 @@ global register, delete_user, update_user, banned_user, desbanned
 # TODO:
 #  Possible change location.
 PG_CREATE_TABLE = \
-    'CREATE TABLE pgUserTab(id SERIAL PRIMARY KEY NOT NULL, name VARCHAR(50), email VARCHAR(50), password VARCHAR(50), is_banned BOOLEAN);'
+    'CREATE TABLE pgUserTab' \
+    '(id SERIAL PRIMARY KEY NOT NULL, name VARCHAR(50), email VARCHAR(50), password VARCHAR(50), is_banned BOOLEAN);'
 
 
 def index(request: HttpRequest):
@@ -59,7 +60,9 @@ def index(request: HttpRequest):
     """ Google Cloud """
 
     # It made for creating Bucket for Storage
-    storage.create_new_bucket_google_cloud("Bucket_usrClient")
+    # The billing account for the owning project is disabled in state absent.
+    # It is necessary pay for uses that function.
+    #storage.create_new_bucket_google_cloud("user-client")
 
     """ Create a iteration with HTML for the media folder. """
 
@@ -85,6 +88,7 @@ def index_videos():
     foreach_media = listdir("media/")
 
     return [i for i in foreach_media if i.endswith(".mp4")]
+
 
 def index_images():
     """
@@ -190,7 +194,7 @@ def signin(request: HttpRequest):
 
     if request.method == 'POST':
 
-        """ HINTS: pgusertab.name email password """
+        """ HINTS: pgusertab.name email password. Names of the columns. """
 
         name = request.POST['name']
         email = request.POST['email']
@@ -270,6 +274,7 @@ def delete(request: HttpRequest):
     }
 
     return render(request, 'delete.html', delete_data_context)
+
 
 def banned(request: HttpRequest):
     """
