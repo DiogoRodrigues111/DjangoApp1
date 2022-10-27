@@ -1,24 +1,29 @@
 from django.core import mail
+#from django.core.mail import BadHeaderError
+#from django.http import HttpResponse
+from DjangoApp1.settings import EMAIL_BACKEND
+import os
+
+""" CONSTANT """
+
+connection = mail.get_connection(EMAIL_BACKEND)
+connection.open()
 
 
-class SendEmail(mail.EmailMessage):
+def create_new_email(subject, message, _from, _to):
     """
-    Send an Email.
-
-    Note:
-        Extended to django.core.mail
+    Create a new email.
     """
 
-    def create_new_email(self, message, _from, _to):
-        """
-        Create a new email.
-        """
+    email = mail.EmailMessage(
+        subject=subject,
+        body=message,
+        from_email=_from,
+        to=[_to],
+        connection=connection
+    )
 
-        """ Specify arguments for mail. """
+    email.send()
 
-        self.from_email = _from
-        self.to = _to
-        self.body = message
-        self.send()
-
-        return self.message()
+    connection.send_messages([email])
+    connection.close()

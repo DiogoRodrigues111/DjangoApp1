@@ -3,6 +3,8 @@ import os
 
 """ CONSTANTS """
 
+# TODO:
+#   Maybe put this constant in settings.py
 # Top-level of the environments set.
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "djangoapp-366400-27c6c0b72706.json"
 

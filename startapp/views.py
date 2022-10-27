@@ -9,14 +9,17 @@ from .forms.forms import (
 , PgUpdate
 , PgDelete
 , PgUnbanned
+, SendEmail
 )
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
 from .databases.mongodb import mongo_user_db
 from .databases.postgresql import pg_user_db
 from .cookies.cookies_rec import CookiesRecord
+from .mail import email
 from django.utils.datastructures import MultiValueDictKeyError
-#from .cloud.google import storage
+
+# from .cloud.google import storage
 
 """ GLOBALS """
 
@@ -47,7 +50,7 @@ def index(request: HttpRequest):
     """ When entry in home page the database, is created automatically. """
 
     # Cookies
-    CookiesRecord.cookies_new(response=HttpResponse("Cookies Created!"))
+    CookiesRecord.cookies_new(self=CookiesRecord(), response=HttpResponse("Cookies created with success"))
 
     """ Databases """
 
@@ -62,7 +65,7 @@ def index(request: HttpRequest):
     # It made for creating Bucket for Storage
     # The billing account for the owning project is disabled in state absent.
     # It is necessary pay for uses that function.
-    #storage.create_new_bucket_google_cloud("user-client")
+    # storage.create_new_bucket_google_cloud("user-client")
 
     """ Create a iteration with HTML for the media folder. """
 
@@ -362,3 +365,37 @@ def unbanned(request: HttpRequest):
     }
 
     return render(request, 'unbanned.html', user_banned_context)
+
+
+def send_email(request: HttpRequest):
+    """
+
+    Send an email.
+
+    Generation Html page.
+
+    """
+
+    snd = SendEmail(request.POST)
+
+    if request.method == "POST":
+
+        param_subject = request.POST["subject"]
+        param_text = request.POST["text"]
+        param_email_to = request.POST["_to"]
+        param_email_from = request.POST["_from"]
+
+        email.create_new_email(subject=param_subject, message=param_text,
+                                _from=param_email_from, _to=param_email_to)
+
+        if snd.is_valid():
+            print(F'Email send with success to {param_email_to}')
+            redirect('/')
+        else:
+            raise RuntimeError(F'Failed to send email.')
+
+    email_sender = {
+        "sender": snd
+    }
+
+    return render(request, 'mail.html', email_sender)

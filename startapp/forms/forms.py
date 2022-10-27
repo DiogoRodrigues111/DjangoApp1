@@ -32,9 +32,8 @@ class PgUnbanned(forms.Form):
     email = fields.EmailField(required=True)
 
 
-class HTMLImage():
-    pass
-
-
-class HTMLVideo():
-    pass
+class SendEmail(forms.Form):
+    subject = fields.CharField(required=True)
+    text = fields.CharField(widget=widgets.Textarea(), required=True)
+    _to = fields.EmailField(required=True)
+    _from = fields.EmailField(required=True)
