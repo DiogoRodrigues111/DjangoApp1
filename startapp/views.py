@@ -1,7 +1,7 @@
 from genericpath import exists
 from os import mkdir, listdir, path
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms.forms import (
     PgBanned
 , UploadFileClass
@@ -10,9 +10,10 @@ from .forms.forms import (
 , PgDelete
 , PgUnbanned
 , SendEmail
+, Login
+, CheckLogin
 )
 from django.core.files.storage import FileSystemStorage
-from django.shortcuts import redirect
 from .databases.mongodb import mongo_user_db
 from .databases.postgresql import pg_user_db
 from .cookies.cookies_rec import CookiesRecord
@@ -67,11 +68,14 @@ def index(request: HttpRequest):
     # It is necessary pay for uses that function.
     # storage.create_new_bucket_google_cloud("user-client")
 
-    """ Create a iteration with HTML for the media folder. """
+    """ Create a iteration with HTML. """
+
+    email_display = CheckLogin(request.GET)["email"].value()
 
     context_page = {
         "Videos": index_videos(),
-        "Images": index_images()
+        "Images": index_images(),
+        "Login": email_display
     }
 
     return render(request, 'default.html', context_page)
@@ -85,6 +89,7 @@ def index_videos():
 
     Returns:
         rendering page
+
     """
 
     # Take list of the files in media folder.
@@ -239,7 +244,31 @@ def login(request: HttpRequest):
 
     """
 
-    return render(request, 'login.html')
+    user_login = Login(request.POST)
+
+    if request.method == "POST":
+
+        email = request.POST["email"]
+        password = request.POST["password"]
+
+        pg_user_db.pg_user_login(email=email, password=password)
+
+        if user_login.is_valid():
+            # It is checked automatically if email exists.
+            # Take name values of email digitized.
+            #email_if_check = request.POST["email"]
+            # Send to next page, in the case of default.html.
+            #login_check(email_if_check)
+
+            return redirect("/")
+        else:
+            raise RuntimeError("Login forms not valid.")
+
+    login_status = {
+        "login": user_login
+    }
+
+    return render(request, 'login.html', login_status)
 
 
 def delete(request: HttpRequest):
@@ -399,3 +428,11 @@ def send_email(request: HttpRequest):
     }
 
     return render(request, 'mail.html', email_sender)
+
+
+def success(request: HttpRequest):
+    return render(request, 'success.html')
+
+
+def failed(request: HttpRequest):
+    return render(request, 'failed.html')

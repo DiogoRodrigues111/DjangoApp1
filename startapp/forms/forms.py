@@ -32,6 +32,15 @@ class PgUnbanned(forms.Form):
     email = fields.EmailField(required=True)
 
 
+class Login(forms.Form):
+    email = fields.EmailField(required=True)
+    password = fields.CharField(widget=widgets.PasswordInput(), label='Enter with password')
+
+
+class CheckLogin(forms.Form):
+    email = fields.EmailField()
+
+
 class SendEmail(forms.Form):
     subject = fields.CharField(required=True)
     text = fields.CharField(widget=widgets.Textarea(), required=True)

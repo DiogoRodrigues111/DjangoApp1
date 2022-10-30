@@ -19,5 +19,9 @@
             <source class="border-rounded" src="media/{{ videos }}" type="video/mp4">
         </video>
     {% endfor %}
+
+    {% if Login is not None %}
+        <h1>{{ Login }}</h1>
+    {% endif %}
 </body>
 </html>

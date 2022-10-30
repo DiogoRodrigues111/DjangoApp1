@@ -5,6 +5,10 @@
     <title>Login Page</title>
 </head>
 <body>
-
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ login }}
+        <input type="submit" value="Login"/>
+    </form>
 </body>
 </html>

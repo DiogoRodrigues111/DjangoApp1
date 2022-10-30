@@ -1,7 +1,4 @@
-from distutils.util import execute
-from sys import executable
-import psycopg2
-from psycopg2 import errors
+from psycopg2 import errors, connect
 
 
 def insert_new_data_pg(name, email, password, is_banned: bool):
@@ -88,6 +85,7 @@ def pg_delete_columns(email):
 
     return None
 
+
 def pg_drop_if_exists(table_name):
     """ 
     
@@ -106,6 +104,7 @@ def pg_drop_if_exists(table_name):
     status_added = create_new_cmd_pg(pg_drop_table)
 
     return status_added
+
 
 def pg_user_banned(is_banned, email):
     """
@@ -131,6 +130,42 @@ def pg_user_banned(is_banned, email):
     return status_added
 
 
+def switch_return_status(nInt):
+    pass
+
+
+def pg_user_login(email, password):
+    """
+
+    Granted access to user in the case find on Database.
+
+    Args:
+        email:
+            email for find.
+
+        password:
+            password of the user for check it.
+
+    Returns:
+        Status granted or denied.
+
+    """
+
+    sql = F"""
+        SELECT email, password FROM pgUserTab WHERE 
+            EXISTS(SELECT email,  password FROM pgUserTab WHERE email='{email}' AND password='{password}');
+    """
+
+    find = create_new_cmd_pg(query=sql, seq=(email, password))
+
+    if "email=" == email and "password=" == password in sql and find:
+        print("Login Success")
+    elif "email=" != email or "password=" != password in sql and find:
+        print("Login Failed.")
+    else:
+        print("Result undefined")
+
+
 def create_new_cmd_pg(query, seq=None):
     """
 
@@ -151,7 +186,7 @@ def create_new_cmd_pg(query, seq=None):
 
     """
 
-    new_instance = psycopg2.connect(dbname='myuserdb', host='localhost', user='root', password='root', port='5432')
+    new_instance = connect(dbname='myuserdb', host='localhost', user='root', password='root', port='5432')
     if new_instance:
         print('Connection ready with Postgresql.')
     else:
