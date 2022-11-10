@@ -1,6 +1,16 @@
 # This is an *** Example ***
 # Site Font: https://hub.docker.com/_/python/
 
-
+# Build App
 $ docker build -t my-python-app .
+
+# Run App
 $ docker run -it --rm --name my-running-app my-python-app
+
+### Originals ###
+
+# build
+sudo docker build -t djangoapp1 .
+
+# Run
+sudo docker run -it --rm --name manage.py djangoapp1:latest
