@@ -8,20 +8,62 @@
     <link rel="stylesheet" type="text/css" href="{% static STATIC_CSS_URL %}css/site.css"/>
 </head>
 <body>
+    <div class="container reveal fade-left div_media">
     {% for im in Images %}
     <a href="media/{{ im }}">
-        <img class="border-rounded" src="media/{{ im }}" width="210" height="210"/>
+        <img class="fit-object_media" src="media/{{ im }}" width="210" height="210"/>
     </a>
     {% endfor %}
 
     {% for videos in Videos %}
         <video controls loop width="210" height="210">
-            <source class="border-rounded" src="media/{{ videos }}" type="video/mp4">
+            <source class="fit-object_media" src="media/{{ videos }}" type="video/mp4">
         </video>
     {% endfor %}
+
+    </div>
 
     {% if Login is not None %}
         <h1>{{ Login }}</h1>
     {% endif %}
+
+    <script>
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 30;   // 150
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                } else {
+                    reveals[i].classList.remove("active");
+                }
+
+            }
+
+        }
+        window.addEventListener("load", reveal);
+        reveal();
+
+        //function show_scroll_px() {
+        //    document.getElementsById('showScroll').innerHTML = window.pageYOffset + 'px';
+        //}
+        //window.addEventListener('scroll', show_scroll_px);
+
+
+        // function populate() {
+        //     let i=0;
+        //     while(true) {
+        //         let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom;
+        //         if (windowRelativeBottom > document.documentElement.clientHeight + 100) break;
+        //         document.body.insertAdjacentHTML("onscroll", document.getElementById("showScroll"));
+        //     }
+        // }
+        // window.addEventListener('scroll', populate);
+        // populate(); // init document
+    </script>
 </body>
 </html>

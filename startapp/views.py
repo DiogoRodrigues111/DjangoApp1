@@ -70,12 +70,12 @@ def index(request: HttpRequest):
 
     """ Create a iteration with HTML. """
 
-    email_display = CheckLogin(request.GET).email
+    # email_display = CheckLogin(request.GET)
 
     context_page = {
         "Videos": index_videos(),
         "Images": index_images(),
-        "Login": email_display
+        # "Login": email_display
     }
 
     return render(request, 'default.html', context_page)
