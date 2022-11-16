@@ -1,5 +1,6 @@
 from django.forms import BooleanField, forms, fields, widgets, models
 
+""" Lists of formularies from HTML pages. """
 
 class UploadFileClass(forms.Form):
     file = forms.FileField(required=False)

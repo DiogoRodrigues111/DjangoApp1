@@ -1,8 +1,5 @@
 from django.core import mail
-#from django.core.mail import BadHeaderError
-#from django.http import HttpResponse
 from DjangoApp1.settings import EMAIL_BACKEND
-import os
 
 """ CONSTANT """
 
