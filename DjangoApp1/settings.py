@@ -145,4 +145,4 @@ EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'drroessler@hotmail.com.br'
-EMAIL_HOST_PASSWORD = '_diogo22'
+EMAIL_HOST_PASSWORD = '********' #password
