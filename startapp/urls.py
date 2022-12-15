@@ -18,7 +18,7 @@ urlpatterns = [
     path('delete', views.delete),
     path('banned', views.banned),
     path('unbanned', views.unbanned),
-    path('mail', views.send_email),
+    #path('mail', views.send_email),
     path('success', views.success),
     path('failed', views.failed)
 ] + static(settings.STATIC_CSS_URL, document_root=settings.STATIC_CSS_ROOT)

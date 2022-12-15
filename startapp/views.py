@@ -17,7 +17,7 @@ from django.core.files.storage import FileSystemStorage
 from .databases.mongodb import mongo_user_db
 from .databases.postgresql import pg_user_db
 from .cookies.cookies_rec import CookiesRecord
-from .mail import email
+#from .mail import email
 from django.utils.datastructures import MultiValueDictKeyError
 
 # from .cloud.google import storage
@@ -396,7 +396,7 @@ def unbanned(request: HttpRequest):
     return render(request, 'unbanned.html', user_banned_context)
 
 
-def send_email(request: HttpRequest):
+#def send_email(request: HttpRequest):
     """
 
     Send an email.
@@ -404,7 +404,7 @@ def send_email(request: HttpRequest):
     Generation Html page.
 
     """
-
+"""
     snd = SendEmail(request.POST)
 
     if request.method == "POST":
@@ -428,6 +428,7 @@ def send_email(request: HttpRequest):
     }
 
     return render(request, 'mail.html', email_sender)
+"""
 
 
 def success(request: HttpRequest):
